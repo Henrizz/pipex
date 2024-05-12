@@ -9,11 +9,11 @@ Parse command line arguments to extract file names and commands.
 
 Main checklist
 
-Check the existence of infile and outfile
+	-yes-Check the existence of infile and outfile
 
-be sure to understand what > does when the file does not exist
+	-yes-be sure to understand what > does when the file does not exist
 
-Create the necessary pipe (or pipes)
+	-yes-Create the necessary pipe (or pipes)
 
 Create a child process for each command
 
@@ -46,19 +46,27 @@ https://github.com/jdecorte-be/42-Pipex
 
 PLAN: 
 MAIN
+	argv are the file names and commands (command and flag separated by space)
 
-	- argc needs to be 5
-	- make fork, then child, else parent
+yes - argc needs to be 5
+yes- make fork, then child, else parent
 
 CHILD
-	- open file (argv[1]) into int fd
-	- make fd replace stdin 0 (dup2)
+yes- open file (argv[1]) into int fd
+yes- make fd replace stdin 0 (dup2)
 	- replace stdout 1 with pipfd[1]
-	- close read end of pipe
+yes- close read end of pipe
 	- execute argv[2] mit env
 EXECVE
 	- split the command argv[2] into char array ** 
-	- get the path mit get_path (make yourself) --> erstes wort vom gesplitteten string ist der path?
+	- get the path of the command (make yourself) --> 
+		--> make an array of all the different directories in the PATH line of env (limited by ':')
+		--> split the command in different components (limited by ' ')
+		--> put '/' at the end of path
+		--> combine directory with command name (first array of command)
+		--> check if it's executable (with access function), if yes return this path, else go on to next directory and do it again 
+		--> free all the things if fail or success 
+	- execute the command with execve
 	- error handling fuer execve fail
 
 PARENT
