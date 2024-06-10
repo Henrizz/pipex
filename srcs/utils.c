@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Henriette <Henriette@student.42.fr>        +#+  +:+       +#+        */
+/*   By: hzimmerm <hzimmerm@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 19:32:02 by Henriette         #+#    #+#             */
-/*   Updated: 2024/05/12 21:35:44 by Henriette        ###   ########.fr       */
+/*   Updated: 2024/05/16 13:51:12 by hzimmerm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,31 +36,31 @@ void	free_array(char **str)
 int	check_permissions(char *infile, char *outfile)
 {
 	int	fd;
-	
+
 	if (access(infile, R_OK) == -1)
-		return (error_return("read access: "));
+		return (error_return("infile"));
 	if (access(outfile, W_OK) == -1)
 	{
 		if (access(outfile, F_OK) == -1)
 		{
 			fd = open(outfile, O_WRONLY | O_CREAT, 0644);
 			if (fd == -1)
-				return (error_return("open :"));
+				return (error_return("outfile"));
 			else
 			{
 				close(fd);
 				return (1);
 			}
 		}
-		return (error_return("write access: "));
+		return (error_return("outfile"));
 	}
 	return (1);
 }
 
 char	*get_paths(char **env, char *name)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 	char	*sub;
 
 	i = 0;
@@ -84,8 +84,8 @@ char	*get_paths(char **env, char *name)
 char	*find_cmd_file(char **cmd, char **env)
 {
 	char	**paths;
-	int	i;
-	char *cmd_file;
+	int		i;
+	char	*cmd_file;
 	char	*temp;
 
 	i = 0;
@@ -102,7 +102,10 @@ char	*find_cmd_file(char **cmd, char **env)
 		}
 		else
 			free(cmd_file);
-		i++;	
+		i++;
 	}
+	ft_putstr_fd(cmd[0], 2);
+	ft_putstr_fd(": command not found\n", 2);
+	free_array(paths);
 	return (NULL);
 }

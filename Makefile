@@ -3,20 +3,19 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: Henriette <Henriette@student.42.fr>        +#+  +:+       +#+         #
+#    By: hzimmerm <hzimmerm@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/11 19:00:12 by hzimmerm          #+#    #+#              #
-#    Updated: 2024/05/12 19:33:30 by Henriette        ###   ########.fr        #
+#    Updated: 2024/06/10 11:36:20 by hzimmerm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = pipex
-BONUS_NAME = checker
-CFLAGS = -g -Wall -Wextra -Werror -I../libft_rep -I../42_rep/printf
+CFLAGS = -g -Wall -Wextra -Werror -Isrcs/libft
 SRCS = srcs/main.c srcs/utils.c
 LDFLAGS = -fsanitize=address
-LIBFT = ../libft_rep/libft.a
-PRINTFLIBFT = ../42_rep/printf/libftprintf.a
+LIBFT = srcs/libft/libft.a
+LIB = srcs/libft
 OBJS = $(SRCS:.c=.o)
 RM = rm -rf
 CC = cc
@@ -25,22 +24,19 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	@if [ ! -f "$(LIBFT)" ]; then \
-		make -C ../libft_rep; \
+		make -C $(LIB); \
 	fi
-	@if [ ! -f "$(PRINTLIBFT)" ]; then \
-		make -C ../42_rep/printf; \
-	fi
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(PRINTFLIBFT) $(LDFLAGS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
 	chmod +x $(NAME)
 
 %.o : %.c
 	cc $(CFLAGS) -c $< -o $@
 	
 clean:
-	$(RM) srcs/*.o $(PRINTF)/*.o $(LIB)/*.o
+	$(RM) srcs/*.o $(LIB)/*.o
 
 fclean: clean
-	$(RM) $(NAME) $(LIBFT) $(PRINTFLIBFT)
+	$(RM) $(NAME) $(LIBFT)
 
 re: fclean $(NAME)
 
